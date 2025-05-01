@@ -192,4 +192,3 @@ for i, v in enumerate(post_fault_voltages):
 #print(f"\nSolution Faults Bus Voltages: {ifs_2[1]}")
 Z44 = faults.zbus[circuit1.buses["Bus4"].index, circuit1.buses["Bus4"].index]
 print(f"Zbus[4,4] = {Z44}")
-

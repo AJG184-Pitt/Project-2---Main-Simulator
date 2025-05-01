@@ -307,4 +307,89 @@
 	
 	\section{Example Problem with Solution}
 	
+	\subsection{Problem Definition}
+	
+	\noindent
+	This example demonstrates the use of the Simple Circuit Simulator on a 7-Bus power system. The configuration includes
+	
+	\begin{itemize}
+		\item Bus 1: Slack bus, 20 kV, V = 1.00000 p.u., angle = 0.00$^{\circ}$
+		\item Bus 2: PQ bus, 230 kV, V = 0.93692 p.u., angle = -4.44$^{\circ}$
+		\item Bus 3: PQ bus, 230 kV, V = 0.92049 p.u., angle = -5.46$^{\circ}$, Load = 110 MW / 50 MVAr
+		\item Bus 4: PQ bus, 230 kV, V = 0.92980 p.u., angle = -4.70$^{\circ}$, Load = 100 MW / 70 MVAr
+		\item Bus 5: PQ bus, 230 kV, V = 0.92672 p.u., angle = -4.83$^{\circ}$, Load = 100 MW / 65 MVAr
+		\item Bus 6: PQ bus, 230 kV, V = 0.93968 p.u., angle = -3.95$^{\circ}$
+		\item Bus 7: PV bus, 18 kV, V = 0.99999 p.u., angle = +2.15$^{\circ}$, Generator = 200 MW
+	\end{itemize}
+	
+	\noindent
+	Components include:
+	
+	\begin{itemize}
+		\item Transformers: T1 (Bus1-Bus2, 125 MVA, 8.5\%, X/R=10), T2 (Bus6-Bus7, 200 MVA, 10.5\%, X/R=12)
+		\item Transmission Lines: L1-L6, 10-35 km, using ACSR conductor, double bundle, and triangle geometry
+	\end{itemize}
+	
+	\subsection{Solution Process}
+	The simulator applies the Newton-Raphson power flow algorithm to solve bus voltages and power injections.
+	
+	\noindent
+	Newton Raphson Solution:
+	
+	\begin{itemize}
+		\item Initial voltages and angles are set for each bus
+		\item Power mismatches are computed based on specified vs. calculated P and Q
+		\item The Jacobian matrix is built using partial derivatives
+		\item Iterate through the system to find the voltages
+	\end{itemize}
+	
+	\noindent
+	Fault Calculations:
+	
+	\begin{itemize}
+		\item Using generator impedances to edited Ybus admittance matrix to find Zbus = 1/Ybus
+		\item Using the Zbus to find the faulted current at the faulted bus is given by If = voltage/Zbus
+		\item Find the voltages at the other buses after the fault using Voltgae = (1 - (Zbus / Zbus) * voltage
+	\end{itemize}
+	
+	\subsection{Expected Output}
+	Final voltages (p.u.) and angles (degrees) after convergence:
+	
+	\begin{itemize}
+		\item Bus 1: 1.00000 p.u., 0.00$^{\circ}$
+		\item Bus 2: 0.93692 p.u., -4.44$^{\circ}$
+		\item Bus 3: 0.92049 p.u., -5.46$^{\circ}$
+		\item Bus 4: 0.92980 p.u., -4.70$^{\circ}$
+		\item Bus 5: 0.92672 p.u., -4.83$^{\circ}$
+		\item Bus 6: 0.93968 p.u., -3.95$^{\circ}$
+		\item Bus 7: 0.99999 p.u., +2.15$^{\circ}$
+	\end{itemize}
+	
+	\noindent
+	Power Injections:
+	
+	\begin{itemize}
+		\item Bus 1: P = 1.1590 p.u., Q = 0.8583 p.u.
+		\item Bus 2: P = 0.0000 p.u., Q = 0.0000 p.u.
+		\item Bus 3: P = -1.1000 p.u., Q = -0.5000 p.u.
+		\item Bus 4: P = -1.0000 p.u., Q = -0.7000 p.u.
+		\item Bus 5: P = -1.0000 p.u., Q = -0.6500 p.u.
+		\item Bus 6: P = -0.0000 p.u., Q = 0.0000 p.u.
+		\item Bus 7: P = 2.0000 p.u., Q = 1.0882 p.u.
+	\end{itemize}
+	
+	\noindent
+	Symmetrical Fault at Bus 4:
+	
+	\begin{itemize}
+		\item Bus4: If = 9.9300 $\angle$ -87.02$^{\circ}$
+		\item Bus 1: V = 0.39953
+		\item Bus 2: V = 0.05923
+		\item Bus 3: V = 0.06032
+		\item Bus 4: V = 0.00000
+		\item Bus 5: V = 0.06305
+		\item Bus 6: V = 0.08378
+		\item Bus 7: V = 0.36211
+	\end{itemize}
+	
 \end{document}

@@ -78,8 +78,8 @@ circuit1.add_load("Load6", "Bus6", 0, 0)
 # circuit1.add_load("Load7", "Bus7", 0, 0)
 
 #adding the generators
-circuit1.add_generator("G1", "Bus1", 1.0, 0.0, 0.12, 0.14, 0.05, 0)
-circuit1.add_generator("G7", "Bus7", 1.0, 200, 0.12, 0.14, 0.05, 0)
+circuit1.add_generator("G1", "Bus1", 1.0, 0.0, .12, 0.14, 0.05, 0)
+circuit1.add_generator("G7", "Bus7", 1.0, 200, .12, 0.14, 0.05, 0)
 
 np.set_printoptions(threshold=np.inf, linewidth=np.inf)
 
@@ -116,7 +116,7 @@ if 'p_calc' in results and 'q_calc' in results:
     for i, bus_name in enumerate(circuit1.buses.keys()):
         p = results['p_calc'][i]
         q = results['q_calc'][i]
-        print(f"{bus_name}: P = {p:.4f} p.u., Q = {q:.4f} p.u.")
+        print(f"{bus_name}: P = {p:.4f} p.u., Q = {q:.4f} p.u.")S
 '''
 solution = Solution("Solution 1", circuit1.buses.values(), circuit1, circuit1.loads)
 solution.start()
@@ -167,11 +167,29 @@ print("========================================")
 
 faults = Solution_Faults(circuit1)
 # faults.calculate_fault_currents()
-ifs = faults.calculate_fault_currents_2(circuit1.buses["Bus1"])
-ifs_2 = faults.calculate_fault_currents_2(circuit1.buses["Bus7"])
+ifs = faults.calculate_fault_currents_2(circuit1.buses["Bus4"])
+#ifs_2 = faults.calculate_fault_currents_2(circuit1.buses["Bus7"])
 
-print(f"\nSolution Faults Current: {ifs[0]}")
-print(f"\nSolution Faults Bus Voltages: {ifs[1]}")
+# Extract fault current
+fault_current = ifs[0]
 
-print(f"\nSolution Faults Current: {ifs_2[0]}")
-print(f"\nSolution Faults Bus Voltages: {ifs_2[1]}")
+# Calculate magnitude and angle
+magnitude = np.abs(fault_current)
+angle_deg = np.degrees(np.angle(fault_current))
+
+# Print result in polar form
+print(f"Fault Current at Bus4: {magnitude:.4f} ∠ {angle_deg:.2f}° ")
+
+
+#print(f"\nSolution Faults Current: {ifs[0]}")
+#print(f"\nSolution Faults Bus Voltages: {ifs[1]}")
+post_fault_voltages = np.abs(ifs[1])  # Magnitude only
+print("\\n--- Post-Fault Voltages at All Buses (p.u.) ---")
+for i, v in enumerate(post_fault_voltages):
+    print(f"Bus {i+1}: {v:.5f}")
+
+#print(f"\nSolution Faults Current: {ifs_2[0]}")
+#print(f"\nSolution Faults Bus Voltages: {ifs_2[1]}")
+Z44 = faults.zbus[circuit1.buses["Bus4"].index, circuit1.buses["Bus4"].index]
+print(f"Zbus[4,4] = {Z44}")
+
